@@ -44,7 +44,17 @@ Create a config file for your models :
             :name => 'birthdate',
             :type => Date
           }
-        ]
+        ],
+        :indexes => [{ name: 1, email: 1 }, { background: true }],
+        :custom_definitions => %q{
+          def say_hello
+            "Hello there !!! I'm #{self.name}, you can reach out to me on #{self.email}."
+          end
+
+          def self.yell_out_load
+            "I scream U scream we all scream for I scream !!!!"
+          end
+        }
       }, {
         :name => 'Employee',
         :extends => 'Person',
