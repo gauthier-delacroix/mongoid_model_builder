@@ -44,7 +44,9 @@ module Mongoid
         end
 
         add_includes includes
-        add_fields model[:fields]
+        add_fields model[:fields] if model.has_key? :fields
+        add_indexes model[:indexes] if model.has_key? :indexes
+        add_custom_definitions model[:custom_definitions] if model.has_key? :custom_definitions
 
         @code << 'end'
 
@@ -59,6 +61,10 @@ module Mongoid
         @code << source
       end
 
+      def add_custom_definitions code
+        model_append code
+      end
+
       # Adds class includes to current model class
       def add_includes includes
         a = []
@@ -66,6 +72,10 @@ module Mongoid
           a << "include #{value.constantize}"
         end
         model_append a
+      end
+
+      def add_indexes array
+        model_append "index(#{array.join(",")})"
       end
 
       # Adds fields to current model class
